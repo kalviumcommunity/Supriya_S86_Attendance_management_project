@@ -38,4 +38,3 @@ This project is a basic Java application designed to manage attendance by modeli
 ### How to Run
 1. Navigate to the project root directory.
 2. Compile: `javac src/com/school/*.java` (or list individual files including `AttendanceRecord.java`)
-3. Run: `java -cp src com.school.Main`
