@@ -27,7 +27,27 @@ public class Main {
 
         System.out.println("----- Course Details -----");
         for (Course c : courses) {
-            c.displayDetails();
+            c.displayDetails();package com.school;
+
+public class Main {
+    public static void main(String[] args) {
+        // Create a student, teacher, and staff
+        Student student = new Student("Alice", "10th Grade");
+        Teacher teacher = new Teacher("Mr. John", "Mathematics");
+        Staff staff = new Staff("Bob", "Librarian");
+
+        System.out.println("----- School Members -----");
+        student.displayDetails();
+        teacher.displayDetails();
+        staff.displayDetails();
+
+        // Attendance Example (using student.getId())
+        System.out.println("\n----- Attendance Record -----");
+        AttendanceRecord attendance = new AttendanceRecord(student.getId(), "2025-09-22", true);
+        attendance.displayRecord();
+    }
+}
+
             System.out.println();
         }
 
