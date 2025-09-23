@@ -38,12 +38,4 @@ This project is a basic Java application designed to manage attendance by modeli
 ### How to Run
 1. Navigate to the project root directory.
 2. Compile: `javac src/com/school/*.java` (or list individual files including `AttendanceRecord.java`)
-3. Run: `java -cp src com.school.Main`
 
-## Part 5: Establishing Students, Teaching & Non-Teaching Staff hierarchy
-- Created `Person.java` as a base class with auto-generated ID and name.
-- Modified `Student.java` to inherit from `Person`, added grade level, and customized `displayDetails()`.
-- Created `Teacher.java` with subject taught and its own `displayDetails()`.
-- Created `Staff.java` with staff role and overridden `displayDetails()`.
-- Demonstrated all three in `Main.java`.
-- Updated `AttendanceRecord` to use `getId()` from `Person`.
