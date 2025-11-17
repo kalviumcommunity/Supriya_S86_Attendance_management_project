@@ -1,3 +1,5 @@
+package com.school;
+
 public class Teacher extends Person {
     private String subjectTaught;
 

@@ -1,19 +1,11 @@
 package com.school;
 
-public class Student implements Storable {
-    private static int idCounter = 1;
-    private int id;
-    private String name;
+public class Student extends Person implements Storable {
     private String gradeLevel;
 
     public Student(String name, String gradeLevel) {
-        this.id = idCounter++;
-        this.name = name;
+        super(name);
         this.gradeLevel = gradeLevel;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public void displayDetails() {
