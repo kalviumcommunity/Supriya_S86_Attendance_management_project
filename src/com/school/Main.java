@@ -24,9 +24,12 @@ public class Main {
         courses.add(c1);
         courses.add(c2);
 
-        List<AttendanceRecord> records = new ArrayList<>();
-        records.add(new AttendanceRecord(s1, c1, "Present"));
-        records.add(new AttendanceRecord(s2, c2, "Absent"));
+    // Use AttendanceService to manage attendance records
+    AttendanceService attendanceService = new AttendanceService();
+
+    // Mark attendance using object references
+    attendanceService.markAttendance(s1, c1, "Present");
+    attendanceService.markAttendance(s2, c2, "Absent");
 
         // Create some staff/teachers
         Teacher t1 = new Teacher("Mr. Smith", "Mathematics");
@@ -45,8 +48,14 @@ public class Main {
         System.out.println("----- Courses -----");
         for (Course c : courses) c.displayDetails();
 
-        System.out.println("----- Attendance -----");
-        for (AttendanceRecord r : records) r.displayRecord();
+    System.out.println("----- Attendance (all) -----");
+    attendanceService.displayAttendanceLog();
+
+    System.out.println("----- Attendance for student Alice -----");
+    attendanceService.displayAttendanceLog(s1);
+
+    System.out.println("----- Attendance for course Physics -----");
+    attendanceService.displayAttendanceLog(c2);
 
         // Save to files (filter students from schoolPeople as an example)
         FileStorageService storage = new FileStorageService();
@@ -57,8 +66,8 @@ public class Main {
             }
         }
 
-        storage.saveData(studentsToSave, "students.txt");
-        storage.saveData(courses, "courses.txt");
-        storage.saveData(records, "attendance_log.txt");
+    storage.saveData(studentsToSave, "students.txt");
+    storage.saveData(courses, "courses.txt");
+    // attendanceService already saves the attendance log when marking entries.
     }
 }
