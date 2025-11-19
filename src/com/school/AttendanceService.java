@@ -8,18 +8,29 @@ import java.util.stream.Collectors;
 public class AttendanceService {
     private List<AttendanceRecord> attendanceLog;
     private FileStorageService storage;
+    private RegistrationService registrationService;
 
-    public AttendanceService() {
+    public AttendanceService(RegistrationService registrationService) {
+        if (registrationService == null) {
+            throw new IllegalArgumentException("RegistrationService cannot be null");
+        }
         this.attendanceLog = new ArrayList<>();
         this.storage = new FileStorageService();
+        this.registrationService = registrationService;
     }
 
-    public AttendanceService(FileStorageService storage) {
+    public AttendanceService(RegistrationService registrationService, FileStorageService storage) {
+        if (registrationService == null) {
+            throw new IllegalArgumentException("RegistrationService cannot be null");
+        }
         this.attendanceLog = new ArrayList<>();
         this.storage = storage != null ? storage : new FileStorageService();
+        this.registrationService = registrationService;
     }
 
-    // Mark attendance using objects
+    /**
+     * Mark attendance using student and course objects
+     */
     public void markAttendance(Student student, Course course, String status) {
         if (student == null || course == null || status == null) {
             System.err.println("Invalid parameters for markAttendance(Student, Course, String)");
@@ -31,15 +42,18 @@ public class AttendanceService {
         storage.saveData(attendanceLog, "attendance_log.txt");
     }
 
-    // Mark attendance using ids; perform lookups from provided master lists
-    public void markAttendance(int studentId, int courseId, String status, List<Student> allStudents, List<Course> allCourses) {
-        if (status == null || allStudents == null || allCourses == null) {
-            System.err.println("Invalid parameters for markAttendance(int, int, String, List<Student>, List<Course>)");
+    /**
+     * Mark attendance using student ID and course ID
+     * Delegates to RegistrationService for lookups
+     */
+    public void markAttendance(int studentId, int courseId, String status) {
+        if (status == null) {
+            System.err.println("Invalid status for markAttendance(int, int, String)");
             return;
         }
 
-        Optional<Student> sOpt = allStudents.stream().filter(s -> s.getId() == studentId).findFirst();
-        Optional<Course> cOpt = allCourses.stream().filter(c -> c.getCourseId() == courseId).findFirst();
+        Optional<Student> sOpt = registrationService.getStudentById(studentId);
+        Optional<Course> cOpt = registrationService.getCourseById(courseId);
 
         if (!sOpt.isPresent()) {
             System.err.println("Student with ID " + studentId + " not found. Skipping attendance.");
@@ -57,16 +71,22 @@ public class AttendanceService {
         storage.saveData(attendanceLog, "attendance_log.txt");
     }
 
-    // Display everything
+    /**
+     * Display all attendance records
+     */
     public void displayAttendanceLog() {
         if (attendanceLog.isEmpty()) {
             System.out.println("No attendance records available.");
             return;
         }
-        for (AttendanceRecord r : attendanceLog) r.displayRecord();
+        for (AttendanceRecord r : attendanceLog) {
+            r.displayRecord();
+        }
     }
 
-    // Display for a specific student
+    /**
+     * Display attendance records for a specific student
+     */
     public void displayAttendanceLog(Student student) {
         if (student == null) {
             System.err.println("Student is null for displayAttendanceLog(Student)");
@@ -83,7 +103,9 @@ public class AttendanceService {
         filtered.forEach(AttendanceRecord::displayRecord);
     }
 
-    // Display for a specific course
+    /**
+     * Display attendance records for a specific course
+     */
     public void displayAttendanceLog(Course course) {
         if (course == null) {
             System.err.println("Course is null for displayAttendanceLog(Course)");
@@ -100,8 +122,18 @@ public class AttendanceService {
         filtered.forEach(AttendanceRecord::displayRecord);
     }
 
-    // Expose the log if needed
+    /**
+     * Get the full attendance log
+     */
     public List<AttendanceRecord> getAttendanceLog() {
-        return attendanceLog;
+        return new ArrayList<>(attendanceLog);
+    }
+
+    /**
+     * Save attendance records to file
+     */
+    public void saveAttendanceRecords(String filename) {
+        storage.saveData(attendanceLog, filename);
     }
 }
+
