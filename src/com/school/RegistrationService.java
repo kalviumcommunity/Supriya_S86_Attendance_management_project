@@ -141,6 +141,31 @@ public class RegistrationService {
     // ==================== Course Methods ====================
 
     /**
+     * Create and register a new course with default capacity
+     */
+    public Course createCourse(String courseName) {
+        return createCourse(courseName, 30);
+    }
+
+    /**
+     * Create and register a new course with specified capacity
+     */
+    public Course createCourse(String courseName, int capacity) {
+        if (courseName == null || courseName.trim().isEmpty()) {
+            System.err.println("Cannot create course with empty name");
+            return null;
+        }
+        if (capacity <= 0) {
+            System.err.println("Course capacity must be positive");
+            return null;
+        }
+        Course course = new Course(courseName, capacity);
+        courses.add(course);
+        System.out.println("Course created: " + course.getCourseName() + " (Capacity: " + capacity + ")");
+        return course;
+    }
+
+    /**
      * Register a new course
      */
     public void registerCourse(Course course) {
@@ -150,6 +175,28 @@ public class RegistrationService {
         }
         courses.add(course);
         System.out.println("Course registered: " + course.getCourseName());
+    }
+
+    /**
+     * Enroll a student in a course
+     */
+    public boolean enrollStudentInCourse(Student student, Course course) {
+        if (student == null) {
+            System.err.println("Cannot enroll null student");
+            return false;
+        }
+        if (course == null) {
+            System.err.println("Cannot enroll student in null course");
+            return false;
+        }
+        
+        boolean enrolled = course.addStudent(student);
+        if (enrolled) {
+            System.out.println("Student " + student.getName() + " successfully enrolled in " + course.getCourseName());
+        } else {
+            System.out.println("Failed to enroll student " + student.getName() + " in " + course.getCourseName());
+        }
+        return enrolled;
     }
 
     /**
