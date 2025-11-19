@@ -1,2 +1,2 @@
-1,Mathematics
-2,Physics
+1,Mathematics,3
+2,Physics,2
